@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact & Vet Support – PawMart</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .page-header {
+      background: linear-gradient(135deg, #1a4d2e, #2d7a4f);
+      color: #fff; padding: 48px 24px; text-align: center;
+    }
+    .page-header h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 8px; }
+    .page-header p { opacity: .85; }
+
+    /* ── VET HELPLINE CARDS ── */
+    .helpline-section { max-width: 1280px; margin: 48px auto 0; padding: 0 24px; }
+    .helpline-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 24px; }
+    .helpline-card {
+      background: var(--white); border: 2px solid var(--border); border-radius: var(--radius);
+      padding: 28px 24px; text-align: center; transition: all .2s;
+    }
+    .helpline-card:hover { border-color: var(--primary); box-shadow: 0 8px 24px rgba(45,122,79,.1); transform: translateY(-3px); }
+    .helpline-icon { font-size: 2.8rem; margin-bottom: 14px; }
+    .helpline-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; }
+    .helpline-card p { font-size: 0.87rem; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+    .helpline-action {
+      display: inline-block; padding: 9px 22px; background: var(--primary); color: #fff;
+      border-radius: var(--radius); font-weight: 700; font-size: 0.88rem; text-decoration: none;
+      transition: background .2s; border: none; cursor: pointer;
+    }
+    .helpline-action:hover { background: var(--primary-dark); }
+    .helpline-action.outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+    .helpline-action.outline:hover { background: var(--primary); color: #fff; }
+
+    /* ── CONTACT LAYOUT ── */
+    .contact-section { max-width: 1280px; margin: 48px auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+
+    /* FORM */
+    .contact-form-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px; }
+    .contact-form-box h2 { font-size: 1.4rem; font-weight: 900; margin-bottom: 6px; }
+    .contact-form-box > p { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+    .form-group label { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.92rem;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+      transition: border-color .2s;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--primary); }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-submit { width: 100%; padding: 13px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius); font-weight: 800; font-size: 1rem; cursor: pointer; transition: background .2s; }
+    .form-submit:hover { background: var(--primary-dark); }
+    .form-success { display: none; text-align: center; padding: 24px; }
+    .form-success .success-icon { font-size: 3rem; margin-bottom: 12px; }
+    .form-success h3 { font-size: 1.2rem; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+    .form-success p { color: var(--muted); font-size: 0.9rem; }
+
+    /* INFO PANEL */
+    .contact-info { display: flex; flex-direction: column; gap: 20px; }
+    .info-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
+    .info-card h3 { font-size: 0.95rem; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .info-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; font-size: 0.9rem; }
+    .info-row .iicon { font-size: 1.3rem; flex-shrink: 0; }
+    .info-row div strong { display: block; font-weight: 700; margin-bottom: 2px; }
+    .info-row div span { color: var(--muted); font-size: 0.84rem; }
+    .hours-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.87rem; }
+    .hours-grid .day { color: var(--muted); }
+    .hours-grid .time { font-weight: 600; }
+    .map-placeholder {
+      width: 100%; height: 160px; background: var(--bg);
+      border-radius: var(--radius); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; color: var(--muted); gap: 8px; margin-top: 8px;
+    }
+
+    /* ── FAQ ACCORDION ── */
+    .faq-section { max-width: 1280px; margin: 0 auto 64px; padding: 0 24px; }
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+    .faq-item { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .faq-q {
+      padding: 18px 20px; font-weight: 700; font-size: 0.92rem;
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+      transition: background .2s; user-select: none;
+    }
+    .faq-q:hover { background: var(--bg); }
+    .faq-q.open { color: var(--primary); }
+    .faq-q .arrow { font-size: 0.8rem; transition: transform .2s; }
+    .faq-q.open .arrow { transform: rotate(180deg); }
+    .faq-a { display: none; padding: 0 20px 18px; font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+    .faq-a.open { display: block; }
+
+    /* ── SOCIAL STRIP ── */
+    .social-strip { background: var(--primary); padding: 40px 24px; text-align: center; }
+    .social-strip h2 { color: #fff; font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+    .social-strip p { color: rgba(255,255,255,.8); margin-bottom: 24px; font-size: 0.92rem; }
+    .social-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .social-btn {
+      padding: 10px 22px; border-radius: var(--radius); font-weight: 700;
+      font-size: 0.9rem; text-decoration: none; transition: opacity .2s;
+    }
+    .social-btn:hover { opacity: .85; }
+    .btn-wa { background: #25D366; color: #fff; }
+    .btn-ig { background: #E1306C; color: #fff; }
+    .btn-fb { background: #1877F2; color: #fff; }
+    .btn-yt { background: #FF0000; color: #fff; }
+
+    @media (max-width: 768px) {
+      .contact-section { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="promo-strip">🐾 Free delivery above ₹599 · Use <strong>PAWMART15</strong> for 15% OFF your first order</div>
+
+<nav>
+  <a href="index.html" class="nav-brand">Paw<span>Mart</span> 🐾</a>
+  <div class="nav-search">
+    <input type="text" placeholder="Search pet food, medicines, accessories…" />
+    <button>🔍</button>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="product.html">Products</a>
+    <a href="contact.html" class="active">Contact</a>
+  </div>
+  <div class="nav-actions">
+    <a href="#">Login</a>
+    <a href="#">♡</a>
+    <button class="cart-btn" onclick="toggleCart()">🛒 Cart <span id="cart-count">0</span></button>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>🩺 Vet Support & Contact</h1>
+  <p>We're here 24/7 for you and your furry family members</p>
+</div>
+
+<!-- Vet Helpline Cards -->
+<div class="helpline-section">
+  <h2 class="section-title">Reach Us Instantly</h2>
+  <div class="helpline-grid">
+    <div class="helpline-card">
+      <div class="helpline-icon">📞</div>
+      <h3>Vet Helpline</h3>
+      <p>Speak directly with a registered veterinarian any time of day or night. Available 24/7 for emergencies.</p>
+      <a href="tel:+918001234567" class="helpline-action">Call +91 800-123-4567</a>
+    </div>
+    <div class="helpline-card">
+      <div class="helpline-icon">💬</div>
+      <h3>Live Chat</h3>
+      <p>Chat instantly with our pet care experts. Average response time under 2 minutes during business hours.</p>
+      <button class="helpline-action" onclick="showToast('💬 Live chat coming soon!')">Start Live Chat</button>
+    </div>
+    <div class="helpline-card">
+      <div class="helpline-icon">📱</div>
+      <h3>WhatsApp Support</h3>
+      <p>Send us a message on WhatsApp and get a response within minutes. Share photos for quicker help.</p>
+      <a href="https://wa.me/918001234567" class="helpline-action">Chat on WhatsApp</a>
+    </div>
+    <div class="helpline-card">
+      <div class="helpline-icon">🏪</div>
+      <h3>Visit Our Store</h3>
+      <p>Drop into our flagship veterinary store in Bangalore for in-person consultation and product advice.</p>
+      <a href="#map" class="helpline-action outline">Get Directions</a>
+    </div>
+  </div>
+</div>
+
+<!-- Contact Form + Info -->
+<div class="contact-section">
+  <div class="contact-form-box">
+    <h2>📩 Send Us a Message</h2>
+    <p>We typically respond within 2–4 hours on business days.</p>
+
+    <div id="contact-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name *</label>
+          <input type="text" placeholder="Rahul" />
+        </div>
+        <div class="form-group">
+          <label>Last Name *</label>
+          <input type="text" placeholder="Sharma" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address *</label>
+        <input type="email" placeholder="rahul@example.com" />
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="+91 98765 43210" />
+      </div>
+      <div class="form-group">
+        <label>Subject *</label>
+        <select>
+          <option value="">Select a topic…</option>
+          <option>Order Tracking & Delivery</option>
+          <option>Product / Vet Advice</option>
+          <option>Returns & Refunds</option>
+          <option>Medicine Prescription Query</option>
+          <option>Account & Payments</option>
+          <option>Wholesale / Partnership</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Your Pet Type</label>
+        <select>
+          <option value="">Select pet type…</option>
+          <option>🐶 Dog</option>
+          <option>🐱 Cat</option>
+          <option>🐰 Rabbit</option>
+          <option>🦜 Bird</option>
+          <option>🐹 Small Pet</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message *</label>
+        <textarea placeholder="Describe your question or concern in detail…"></textarea>
+      </div>
+      <button class="form-submit" onclick="submitForm()">Send Message →</button>
+    </div>
+
+    <div class="form-success" id="form-success">
+      <div class="success-icon">✅</div>
+      <h3>Message Sent!</h3>
+      <p>Thank you for reaching out. Our team will respond within 2–4 hours. We'll also send you a confirmation email shortly.</p>
+    </div>
+  </div>
+
+  <div class="contact-info">
+    <div class="info-card">
+      <h3>📍 Store Address</h3>
+      <div class="info-row"><span class="iicon">🏢</span><div><strong>PawMart Flagship Store</strong><span>42, Koramangala 5th Block, Bangalore – 560095, Karnataka</span></div></div>
+      <div class="info-row"><span class="iicon">🚇</span><div><strong>Nearest Metro</strong><span>Koramangala Metro Station (500m walk)</span></div></div>
+      <div id="map" class="map-placeholder"><span>🗺️</span> Interactive map coming soon</div>
+    </div>
+
+    <div class="info-card">
+      <h3>⏰ Working Hours</h3>
+      <div class="hours-grid">
+        <span class="day">Monday – Friday</span><span class="time">9:00 AM – 8:00 PM</span>
+        <span class="day">Saturday</span><span class="time">9:00 AM – 6:00 PM</span>
+        <span class="day">Sunday</span><span class="time">10:00 AM – 4:00 PM</span>
+        <span class="day">Vet Helpline</span><span class="time">24/7 Always Open</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h3>📬 Other Contacts</h3>
+      <div class="info-row"><span class="iicon">📧</span><div><strong>General Enquiries</strong><span>hello@pawmart.in</span></div></div>
+      <div class="info-row"><span class="iicon">📧</span><div><strong>Vet Support</strong><span>vet@pawmart.in</span></div></div>
+      <div class="info-row"><span class="iicon">📧</span><div><strong>Partnerships</strong><span>partners@pawmart.in</span></div></div>
+      <div class="info-row"><span class="iicon">📞</span><div><strong>Order Queries</strong><span>+91 800-123-4568 (Mon–Sat, 9AM–6PM)</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ Accordion -->
+<div class="faq-section">
+  <h2 class="section-title">❓ Frequently Asked Questions</h2>
+  <div class="faq-grid">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>How do I track my order?</span><span class="arrow">▼</span></div>
+      <div class="faq-a">Once your order is dispatched, you'll receive a tracking link via SMS and email. You can also log into your account and visit "My Orders" to get real-time tracking updates.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>Are all medicines on PawMart genuine?</span><span class="arrow">▼</span></div>
+      <div class="faq-a">Yes, 100%. All medicines are sourced directly from authorised distributors and manufacturers. We are registered with the Drug Controller General of India (DCGI) and follow all regulatory guidelines.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>Do I need a prescription for veterinary medicines?</span><span class="arrow">▼</span></div>
+      <div class="faq-a">Certain schedule H medicines require a valid prescription from a registered veterinarian. You'll be prompted to upload a prescription during checkout if required. Our in-house vets can also issue prescriptions via teleconsultation.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>What is your return policy?</span><span class="arrow">▼</span></div>
+      <div class="faq-a">We offer hassle-free 30-day returns on most products. Medicines and opened food items may be subject to restrictions. Simply raise a return request via your account or contact our support team.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>How do I get free delivery?</span><span class="arrow">▼</span></div>
+      <div class="faq-a">Free delivery is automatically applied on all orders above ₹599. We deliver to 500+ cities across India. Express same-day delivery is available in Bangalore, Mumbai, Delhi, Chennai, and Hyderabad.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>Can I consult a vet online for free?</span><span class="arrow">▼</span></div>
+      <div class="faq-a">Yes! Our first online vet consultation is free for all registered users. Subsequent consultations are available at ₹199 per session. Call our helpline at +91 800-123-4567 or use the Live Chat feature on our website.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>Which pet food brands do you carry?</span><span class="arrow">▼</span></div>
+      <div class="faq-a">We stock over 30 leading brands including Royal Canin, Hill's Science Diet, Pedigree, Purina, Whiskas, Orijen, Drools, Me-O, Himalaya Pet, and many more. New brands are added regularly.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>How do I cancel or modify my order?</span><span class="arrow">▼</span></div>
+      <div class="faq-a">Orders can be cancelled or modified within 30 minutes of placing them. After that, if the order is already dispatched, you can raise a return request once it's delivered. Contact our support team immediately for urgent requests.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Social Strip -->
+<div class="social-strip">
+  <h2>Follow PawMart 🐾</h2>
+  <p>Join our pet-loving community for tips, deals, and adorable content</p>
+  <div class="social-btns">
+    <a href="#" class="social-btn btn-wa">📱 WhatsApp</a>
+    <a href="#" class="social-btn btn-ig">📸 Instagram</a>
+    <a href="#" class="social-btn btn-fb">👥 Facebook</a>
+    <a href="#" class="social-btn btn-yt">▶️ YouTube</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>PawMart 🐾</h4>
+      <p style="font-size:.87rem;line-height:1.8;color:#94a3b8">Your trusted veterinary e-commerce store. Vet-approved products delivered with love.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Shop</h4>
+      <a href="shop.html?cat=food">Dog Food</a>
+      <a href="shop.html?cat=food">Cat Food</a>
+      <a href="shop.html?cat=accessories">Accessories</a>
+      <a href="shop.html?cat=medicine">Medicines</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <a href="#">Track Order</a>
+      <a href="#">Returns</a>
+      <a href="contact.html">FAQs</a>
+      <a href="contact.html">Vet Helpline</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About Us</a>
+      <a href="#">Vet Partners</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025 PawMart. All rights reserved. | Made with 🐾 for pet lovers</div>
+</footer>
+
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-header">
+    <h2>🛒 Your Cart</h2>
+    <button class="close-cart" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty"><div>🐾</div>Your cart is empty</div>
+  </div>
+  <div class="cart-summary" id="cart-summary" style="display:none">
+    <div class="summary-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+    <div class="summary-row"><span>Shipping</span><span id="shipping">FREE</span></div>
+    <div class="summary-row"><span>Discount (5%)</span><span id="discount" style="color:var(--success)">-₹0</span></div>
+    <div class="summary-row total"><span>Total</span><span id="total">₹0</span></div>
+    <button class="checkout-btn" onclick="checkout()">Proceed to Checkout →</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="shared.js"></script>
+<script>
+  function submitForm() {
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+    showToast('✅ Message sent! We\'ll reply within 2–4 hours.');
+  }
+
+  function toggleFaq(el) {
+    const answer = el.nextElementSibling;
+    const isOpen = el.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+    document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+    // Open clicked if it was closed
+    if (!isOpen) { el.classList.add('open'); answer.classList.add('open'); }
+  }
+</script>
+</body>
+</html>

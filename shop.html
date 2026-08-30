@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shop – PawMart Veterinary Store</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .page-header {
+      background: linear-gradient(135deg, #1a4d2e, #2d7a4f);
+      color: #fff; padding: 40px 24px; text-align: center;
+    }
+    .page-header h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 8px; }
+    .page-header p { opacity: .85; font-size: 1rem; }
+
+    .shop-layout { max-width: 1280px; margin: 0 auto; padding: 32px 24px; display: grid; grid-template-columns: 260px 1fr; gap: 32px; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { position: sticky; top: 80px; align-self: start; }
+    .sidebar-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 20px; }
+    .sidebar-box h3 { font-size: 0.95rem; font-weight: 800; margin-bottom: 16px; color: var(--text); text-transform: uppercase; letter-spacing: .5px; }
+    .filter-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .filter-list li label { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; cursor: pointer; font-weight: 500; }
+    .filter-list li input[type=checkbox] { accent-color: var(--primary); width: 16px; height: 16px; cursor: pointer; }
+    .filter-count { margin-left: auto; font-size: 0.78rem; color: var(--muted); background: var(--bg); padding: 1px 7px; border-radius: 999px; }
+    .price-range { width: 100%; accent-color: var(--primary); }
+    .price-labels { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--muted); margin-top: 6px; }
+    .sidebar-btn { width: 100%; padding: 10px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius); font-weight: 700; cursor: pointer; margin-top: 8px; }
+    .sidebar-btn:hover { background: var(--primary-dark); }
+    .sidebar-btn.clear { background: transparent; color: var(--danger); border: 1px solid var(--danger); margin-top: 4px; }
+
+    /* ── MAIN CONTENT ── */
+    .shop-main {}
+    .shop-toolbar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+    }
+    .result-count { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+    .sort-select {
+      padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--white); font-size: 0.9rem; color: var(--text); cursor: pointer; outline: none;
+    }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+    .product-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); transition: transform .2s, box-shadow .2s; display: flex; flex-direction: column; overflow: hidden; }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.1); }
+    .product-img { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 4rem; background: var(--bg); }
+    .product-info { padding: 14px; flex: 1; display: flex; flex-direction: column; }
+    .product-badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-bottom: 6px; }
+    .badge-vet { background: #dbeafe; color: #1e40af; }
+    .badge-hot { background: #fee2e2; color: #991b1b; }
+    .badge-sale { background: #dcfce7; color: #166534; }
+    .badge-new { background: #fef9c3; color: #92400e; }
+    .product-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
+    .product-brand { font-size: 0.8rem; color: var(--muted); margin-bottom: 7px; }
+    .stars { color: var(--accent); font-size: 0.83rem; margin-bottom: 7px; }
+    .product-price { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
+    .product-price del { color: var(--muted); font-size: 0.8rem; font-weight: 400; margin-left: 5px; }
+    .discount-tag { color: var(--success); font-size: 0.76rem; font-weight: 700; margin-left: 4px; }
+    .add-cart-btn { margin-top: 12px; padding: 9px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius); font-weight: 700; cursor: pointer; font-size: 0.88rem; transition: background .2s; }
+    .add-cart-btn:hover { background: var(--primary-dark); }
+    .add-cart-btn.added { background: var(--success); }
+
+    /* ── ACTIVE FILTER CHIPS ── */
+    .active-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .filter-chip { background: #dcfce7; color: #166534; border: none; padding: 4px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+    .filter-chip span { font-weight: 800; }
+
+    /* ── PAGINATION ── */
+    .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 40px; margin-bottom: 16px; }
+    .page-btn { width: 38px; height: 38px; border-radius: 8px; border: 1px solid var(--border); background: var(--white); cursor: pointer; font-weight: 700; font-size: 0.9rem; transition: all .2s; }
+    .page-btn:hover, .page-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    @media (max-width: 900px) {
+      .shop-layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="promo-strip">🐾 Free delivery above ₹599 · Use <strong>PAWMART15</strong> for 15% OFF your first order</div>
+
+<nav>
+  <a href="index.html" class="nav-brand">Paw<span>Mart</span> 🐾</a>
+  <div class="nav-search">
+    <input type="text" id="searchInput" placeholder="Search pet food, medicines, accessories…" oninput="applyFilter()" />
+    <button onclick="applyFilter()">🔍</button>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="shop.html" class="active">Shop</a>
+    <a href="product.html">Products</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-actions">
+    <a href="#">Login</a>
+    <a href="#">♡</a>
+    <button class="cart-btn" onclick="toggleCart()">🛒 Cart <span id="cart-count">0</span></button>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>🐾 All Pet Products</h1>
+  <p>500+ vet-approved products for dogs, cats, birds & small animals</p>
+</div>
+
+<div class="shop-layout">
+  <!-- Sidebar Filters -->
+  <aside class="sidebar">
+    <div class="sidebar-box">
+      <h3>Categories</h3>
+      <ul class="filter-list" id="cat-filters">
+        <li><label><input type="checkbox" value="food" onchange="applyFilter()"> 🍖 Pet Food <span class="filter-count">42</span></label></li>
+        <li><label><input type="checkbox" value="treats" onchange="applyFilter()"> 🦴 Treats & Snacks <span class="filter-count">28</span></label></li>
+        <li><label><input type="checkbox" value="accessories" onchange="applyFilter()"> 🎒 Accessories <span class="filter-count">56</span></label></li>
+        <li><label><input type="checkbox" value="grooming" onchange="applyFilter()"> ✂️ Grooming <span class="filter-count">34</span></label></li>
+        <li><label><input type="checkbox" value="medicine" onchange="applyFilter()"> 💊 Medicines <span class="filter-count">19</span></label></li>
+        <li><label><input type="checkbox" value="toys" onchange="applyFilter()"> 🎾 Toys & Play <span class="filter-count">31</span></label></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-box">
+      <h3>Pet Type</h3>
+      <ul class="filter-list">
+        <li><label><input type="checkbox"> 🐶 Dogs</label></li>
+        <li><label><input type="checkbox"> 🐱 Cats</label></li>
+        <li><label><input type="checkbox"> 🐰 Rabbits</label></li>
+        <li><label><input type="checkbox"> 🦜 Birds</label></li>
+        <li><label><input type="checkbox"> 🐹 Small Pets</label></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-box">
+      <h3>Price Range</h3>
+      <input type="range" min="0" max="5000" value="5000" id="priceRange" class="price-range" oninput="document.getElementById('priceVal').textContent='₹'+this.value; applyFilter()" />
+      <div class="price-labels"><span>₹0</span><span id="priceVal">₹5000</span></div>
+    </div>
+
+    <div class="sidebar-box">
+      <h3>Rating</h3>
+      <ul class="filter-list">
+        <li><label><input type="checkbox"> ★★★★★ 5 Stars</label></li>
+        <li><label><input type="checkbox"> ★★★★☆ 4 Stars & up</label></li>
+        <li><label><input type="checkbox"> ★★★☆☆ 3 Stars & up</label></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-box">
+      <h3>Special</h3>
+      <ul class="filter-list">
+        <li><label><input type="checkbox" value="vet" id="vetFilter" onchange="applyFilter()"> 🩺 Vet Approved</label></li>
+        <li><label><input type="checkbox"> 🔥 On Sale</label></li>
+        <li><label><input type="checkbox"> 🆕 New Arrivals</label></li>
+      </ul>
+    </div>
+
+    <button class="sidebar-btn" onclick="applyFilter()">Apply Filters</button>
+    <button class="sidebar-btn clear" onclick="clearFilters()">✕ Clear All</button>
+  </aside>
+
+  <!-- Main Products -->
+  <main class="shop-main">
+    <div class="shop-toolbar">
+      <span class="result-count" id="result-count">Showing all products</span>
+      <select class="sort-select" id="sortSelect" onchange="applyFilter()">
+        <option value="default">Sort: Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+        <option value="discount">Biggest Discount</option>
+      </select>
+    </div>
+
+    <div class="active-filters" id="active-filters"></div>
+    <div class="product-grid" id="product-grid"></div>
+
+    <div class="pagination">
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">→</button>
+    </div>
+  </main>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>PawMart 🐾</h4>
+      <p style="font-size:.87rem;line-height:1.8;color:#94a3b8">Your trusted veterinary e-commerce store.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Shop</h4>
+      <a href="shop.html?cat=food">Dog Food</a>
+      <a href="shop.html?cat=food">Cat Food</a>
+      <a href="shop.html?cat=accessories">Accessories</a>
+      <a href="shop.html?cat=medicine">Medicines</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <a href="#">Track Order</a>
+      <a href="#">Returns</a>
+      <a href="contact.html">FAQs</a>
+      <a href="contact.html">Vet Helpline</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About Us</a>
+      <a href="#">Vet Partners</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025 PawMart. All rights reserved. | Made with 🐾 for pet lovers</div>
+</footer>
+
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-header">
+    <h2>🛒 Your Cart</h2>
+    <button class="close-cart" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty"><div>🐾</div>Your cart is empty</div>
+  </div>
+  <div class="cart-summary" id="cart-summary" style="display:none">
+    <div class="summary-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+    <div class="summary-row"><span>Shipping</span><span id="shipping">FREE</span></div>
+    <div class="summary-row"><span>Discount (5%)</span><span id="discount" style="color:var(--success)">-₹0</span></div>
+    <div class="summary-row total"><span>Total</span><span id="total">₹0</span></div>
+    <button class="checkout-btn" onclick="checkout()">Proceed to Checkout →</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="shared.js"></script>
+<script>
+  function applyFilter() {
+    const q = (document.getElementById('searchInput').value || '').toLowerCase();
+    const checkedCats = [...document.querySelectorAll('#cat-filters input:checked')].map(i => i.value);
+    const maxPrice = parseInt(document.getElementById('priceRange').value);
+    const vetOnly = document.getElementById('vetFilter').checked;
+    const sortVal = document.getElementById('sortSelect').value;
+
+    let list = [...products];
+    if (checkedCats.length) list = list.filter(p => checkedCats.includes(p.cat));
+    if (q) list = list.filter(p => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q));
+    list = list.filter(p => p.price <= maxPrice);
+    if (vetOnly) list = list.filter(p => (p.badge||'').toLowerCase() === 'vet');
+
+    if (sortVal === 'price-asc') list.sort((a,b) => a.price - b.price);
+    else if (sortVal === 'price-desc') list.sort((a,b) => b.price - a.price);
+    else if (sortVal === 'rating') list.sort((a,b) => b.rating - a.rating);
+    else if (sortVal === 'discount') list.sort((a,b) => (b.mrp-b.price)/b.mrp - (a.mrp-a.price)/a.mrp);
+
+    document.getElementById('result-count').textContent = `Showing ${list.length} product${list.length !== 1 ? 's' : ''}`;
+    renderProducts(list, 'product-grid');
+  }
+
+  function clearFilters() {
+    document.querySelectorAll('.sidebar input[type=checkbox]').forEach(i => i.checked = false);
+    document.getElementById('priceRange').value = 5000;
+    document.getElementById('priceVal').textContent = '₹5000';
+    document.getElementById('searchInput').value = '';
+    document.getElementById('sortSelect').value = 'default';
+    applyFilter();
+  }
+
+  // Read URL param for category pre-selection
+  const urlCat = new URLSearchParams(window.location.search).get('cat');
+  if (urlCat) {
+    const cb = document.querySelector(`#cat-filters input[value="${urlCat}"]`);
+    if (cb) cb.checked = true;
+  }
+  applyFilter();
+</script>
+</body>
+</html>
